@@ -49,14 +49,26 @@ const {fullName, email, password} = req.body; //to access schemaData
 export const login = async (req,res) => {
    const {email, password} = req.body;
     try {
-        const user = await User.findOne({email})
+        const user = await User.findOne({email}) //the User.findOne is to search the user database in mongodb to check if (email) that was passed in exists.
 
         if (!user) {
             return res.status(400).json({error: "Invalid Credentials"}); // we use invalid credentials basically so malicious users do not know which field they are getting wrong.
         }
+        const isPasswordCorrect = await bcrypt.compare(password, user.password) //this is done to compare
+        if (!isPasswordCorrect) {
+            return  res.status(400).json({error: "Invalid Credentials"});
+        }
 
-    } catch{
-
+        generateToken(user._id, res)
+        res.status(200).json({
+            _id: user._id,
+            fullName: user.fullName,
+            email: user.email,
+            profiilePic: user.profilePic,
+        })
+    } catch(error){
+        console.log("Enter in login controller",error.message);
+        res.status(500).json({message:"Internal Server Error"});
     }
 };
 

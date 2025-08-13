@@ -14,3 +14,5 @@ export const generateToken = (userId, res) => {
 
     return token;
 } // this is to generate the json web token.
+
+//we named it userId because it is the payload, that is what we renamed the token to be.

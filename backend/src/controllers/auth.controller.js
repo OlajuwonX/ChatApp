@@ -83,5 +83,10 @@ export const logout = async (req,res) => {
     }
 };
 
+export const updateProfile = async (req,res) => {
+
+}
+
+
 //in the try we sign_up new users, hash their passwords and create a token to let them know they are authenticated.
 //to hash passwords we will be using the bcryptjs, it coverts normal passwords like {john_doe123} to gibberish like mfhdkbs_ddnasjd-fuif332jj.

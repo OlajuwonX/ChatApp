@@ -16,6 +16,7 @@ const {fullName, email, password} = req.body; //to access schemaData
         const user = await User.findOne({email})
 
         if (user) return res.status(400).json({message: "Email already exists"});
+
         //to hash passwords
         const salt = await bcrypt.genSalt(10); //10 has to be added as the commission
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -47,6 +48,8 @@ const {fullName, email, password} = req.body; //to access schemaData
     } //use try,catch to catch errors to avoid breaking of code.
 };
 
+//in the try for the sign_up new users, hash their passwords and create a token to let them know they are authenticated.
+//to hash passwords we will be using the bcryptjs, it coverts normal passwords like {john_doe123} to gibberish like mfhdkbsddnasjdfuif332jj.
 export const login = async (req,res) => {
    const {email, password} = req.body;
     try {
@@ -65,7 +68,7 @@ export const login = async (req,res) => {
             _id: user._id,
             fullName: user.fullName,
             email: user.email,
-            profiilePic: user.profilePic,
+            profilePic: user.profilePic,
         })
     } catch(error){
         console.log("Enter in login controller",error.message);
@@ -74,7 +77,6 @@ export const login = async (req,res) => {
 };
 
 export const logout = async (req,res) => {
-
     try{
     res.cookie("jwt", "", {maxAge: 0}) //this is to log out, jwt was the name we gave to the cookie, "" denotes an empty data, maxAge: 0, is to kill the data in the cookie.
     res.status(200).json({message: "Logged out successfully"});
@@ -93,7 +95,7 @@ export const updateProfile = async (req,res) => {
     }
 
     const uploadResponse = await cloudinary.uploader.upload(profilePic); //this function is to upload the profile pic provided to cloudinary.
-    const updatedUser = await User.findByIdAndUpdate(userId, {profilePic:uploadResponse.secure_url}, {new:true}); //so this is done to update the mongodb database from cloudinary, {profilePic} because that is exactly where we are updating. {new:true} is always set in order to get the latest update in the database.
+    const updatedUser = await User.findByIdAndUpdate(userId, {profilePic:uploadResponse.secure_url}, {new:true}).select("-password"); //so this is done to update the mongodb database from cloudinary, {profilePic} because that is exactly where we are updating. {new:true} is always set in order to get the latest update in the database.
 
         res.status(200).json({updatedUser})
     } catch (e) {
@@ -102,6 +104,12 @@ export const updateProfile = async (req,res) => {
     }
 }
 
+export const checkAuth = (req,res) => {
+    try {
+        res.status(200).json(req.user); //basically saying send the user back to the client. Give you the authenticated user.
+    } catch (e) {
+        console.log("Error in chekAuth controller",e.message);
+        res.status(500).json({message:"Internal Server Error"});
+    }
+}
 
-//in the try we sign_up new users, hash their passwords and create a token to let them know they are authenticated.
-//to hash passwords we will be using the bcryptjs, it coverts normal passwords like {john_doe123} to gibberish like mfhdkbs_ddnasjd-fuif332jj.

@@ -16,6 +16,8 @@ app.use(express.json()) //use this to be able to extract the json data from the 
 app.use(cookieParser()); //allows you to use cookie-parser
 
 app.use("/api/auth", authRoutes) //route for authentication
+app.use("/api/message", messageRoutes) //route for message action
+
 
 app.listen(PORT, () => {
     console.log("server is running on PORT " + PORT);

@@ -19,7 +19,7 @@ export const protectRoute = async (req, res, next) => {
             return res.status(404).json({message:"User not found"}); //this is just to check if user does not exist, although it is rarely called.
         }
 
-        req.user = user;
+        req.user = user; //the user is what we call anytime we need a protected route function.
         return next(); //this means if the user exists, then it should proceed to the next function.
 
     } catch (e) {

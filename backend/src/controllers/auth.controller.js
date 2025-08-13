@@ -1,6 +1,7 @@
 import User from '../models/user.model.js'
 import bcrypt from 'bcryptjs';
 import {generateToken} from "../lib/utils.js";
+import cloudinary from "../lib/cloudinary.js";
 
 export const signup = async (req,res) => {
 const {fullName, email, password} = req.body; //to access schemaData
@@ -84,7 +85,21 @@ export const logout = async (req,res) => {
 };
 
 export const updateProfile = async (req,res) => {
+    try{
+    const {profilePic} = req.body; //we grab this from the request, the user function in models.
+    const userId = req.user._id;  //the user is the protected user in the protectRoute. so we can access their _id.
+    if (!profilePic) {
+        return res.status(400).json({error: "A Profile Picture Is Required"});
+    }
 
+    const uploadResponse = await cloudinary.uploader.upload(profilePic); //this function is to upload the profile pic provided to cloudinary.
+    const updatedUser = await User.findByIdAndUpdate(userId, {profilePic:uploadResponse.secure_url}, {new:true}); //so this is done to update the mongodb database from cloudinary, {profilePic} because that is exactly where we are updating. {new:true} is always set in order to get the latest update in the database.
+
+        res.status(200).json({updatedUser})
+    } catch (e) {
+    console.log("Error in update Profile", e.message);
+    res.status(500).json({message:"Internal Server Error"});
+    }
 }
 
 

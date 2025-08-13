@@ -72,8 +72,15 @@ export const login = async (req,res) => {
     }
 };
 
-export const logout = (req,res) => {
-    res.send("logout route");
+export const logout = async (req,res) => {
+
+    try{
+    res.cookie("jwt", "", {maxAge: 0}) //this is to log out, jwt was the name we gave to the cookie, "" denotes an empty data, maxAge: 0, is to kill the data in the cookie.
+    res.status(200).json({message: "Logged out successfully"});
+    } catch(error){
+    console.log("Error in logout controller", error.message)
+    res.status(500).json({message:"Internal Server Error"});
+    }
 };
 
 //in the try we sign_up new users, hash their passwords and create a token to let them know they are authenticated.

@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import Message from "../models/message.model.js";
 import cloudinary from "../lib/cloudinary.js";
+import mongoose from "mongoose";
 
 
 // Logic for the authenticated users sidebar and get messages between users.
@@ -21,6 +22,15 @@ export const getMessages = async (req, res) => {
         const {id: usersChatId}=req.params; //we will use dynamic values, and it is id because that was what we called it in the message routes {:id}. so we are renaming it to usersChatId.
         const myId = req.user._id; //id of the current user.
 
+        // Add debugging logs
+        console.log("Route params:", req.params);
+        console.log("usersChatId:", usersChatId);
+        console.log("myId:", myId);
+
+        if (!mongoose.Types.ObjectId.isValid(usersChatId)) {
+            return res.status(400).json({error: "Invalid user ID"});
+        }
+
         const messages =await Message.find({
             $or: [
                 {senderId: myId, receiverId: usersChatId},
@@ -30,7 +40,7 @@ export const getMessages = async (req, res) => {
 
         res.status(200).json(messages);
     } catch (error) {
-        console.error("Error in getMessages",error.messages);
+        console.error("Error in getMessages",error.message);
         res.status(500).json({error: "Internal Server Error"});
     }
 }
@@ -41,6 +51,21 @@ export const sentMessage = async (req, res) => {
         const {text, image} = req.body;
         const {id:receiverId}=req.params; //renaming this dynamic id as receiver_id, same way we did with my_id.
         const senderId = req.user._id;//current user id.
+
+        // Add debugging logs
+        console.log("Send message params:", req.params);
+        console.log("receiverId:", receiverId);
+        console.log("senderId:", senderId);
+
+        // Validate ObjectId
+        if (!mongoose.Types.ObjectId.isValid(receiverId)) {
+            return res.status(400).json({error: "Invalid receiver ID"});
+        }
+
+        // Validate that either text or image is provided
+        if (!text && !image) {
+            return res.status(400).json({error: "Message must contain either text or image"});
+        }
 
         let imageUrl; //this is in case the message is an image.
         if (image) {
@@ -62,7 +87,7 @@ export const sentMessage = async (req, res) => {
 
         res.status(201).json(newMessage);
     } catch (error) {
-        console.error("Error in sendMessages",error.messages);
+        console.error("Error in sendMessages",error.message);
         res.status(500).json({error: "Internal Server Error"});
     }
 } //the message sent could either be a text or an image.

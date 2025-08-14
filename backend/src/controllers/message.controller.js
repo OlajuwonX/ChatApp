@@ -18,7 +18,7 @@ try{
 
 export const getMessages = async (req, res) => {
     try{
-        const {id:usersChatId}=req.params; //we will use dynamic values, and it is id because that was what we called it in the message routes {:id}. so we are renaming it to usersChatId.
+        const {id: usersChatId}=req.params; //we will use dynamic values, and it is id because that was what we called it in the message routes {:id}. so we are renaming it to usersChatId.
         const myId = req.user._id; //id of the current user.
 
         const messages =await Message.find({
@@ -29,8 +29,8 @@ export const getMessages = async (req, res) => {
         }); //this is to basically get the messages between the two users, either the one initiated by the sender or the one initiated by the receiver. MyId is the current user_id.
 
         res.status(200).json(messages);
-    } catch (e) {
-        console.error("Error in getMessages",e.messages);
+    } catch (error) {
+        console.error("Error in getMessages",error.messages);
         res.status(500).json({error: "Internal Server Error"});
     }
 }
@@ -38,15 +38,15 @@ export const getMessages = async (req, res) => {
 // Logic for the receiving end of the messages sent from the currentId.
 export const sentMessage = async (req, res) => {
     try{
-        const {text, image} = req.params;
+        const {text, image} = req.body;
         const {id:receiverId}=req.params; //renaming this dynamic id as receiver_id, same way we did with my_id.
         const senderId = req.user._id;//current user id.
 
         let imageUrl; //this is in case the message is an image.
         if (image) {
             //Upload base64 image to cloudinary
-            const uploadResponse = await cloudinary.uploader.upload({image});
-            imageUrl = uploadResponse.secure.url;
+            const uploadResponse = await cloudinary.uploader.upload(image);
+            imageUrl = uploadResponse.secure_url;
         }
 
         const newMessage = new Message({
@@ -61,8 +61,8 @@ export const sentMessage = async (req, res) => {
         //to do, implement realtime functionality. => via socket.io
 
         res.status(201).json(newMessage);
-    } catch (e) {
-        console.error("Error in sendMessages",e.messages);
+    } catch (error) {
+        console.error("Error in sendMessages",error.messages);
         res.status(500).json({error: "Internal Server Error"});
     }
 } //the message sent could either be a text or an image.

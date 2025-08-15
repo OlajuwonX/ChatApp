@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import {CiUser} from "react-icons/ci";
 import {Link} from "react-router-dom";
+import ImageContent from "../components/ImageContent.jsx";
+import toast from "react-hot-toast";
 
 const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false); //this is for the show_password button, to make password visible.
@@ -21,7 +23,10 @@ const SignUp = () => {
     const [signup, isSigningUp] = useState({})
 
     const validateForm = () => {
-
+        if (!formData.fullName.trim()) return toast.error("Enter" +
+            " your full name");
+        if (!formData.email.trim()) return toast.error("Enter" + "your email");
+        if (!/\S+@\S+\.\S+/.test(formData.email)) return toast.error("Invalid" + "email format")
     }; //this is to validate if any data is missing in any input fields and error will be returned.
 
     const handleSubmit = (e) => {
@@ -170,7 +175,10 @@ const SignUp = () => {
             </div>
 
             {/*Right Side*/}
-            
+            <ImageContent
+                title="Join our community"
+                subtitle="Connect with friends, share moments and stay in touch loved ones."
+            />
 
         </div>
     )

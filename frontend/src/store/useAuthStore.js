@@ -39,7 +39,21 @@ export const useAuthStore = create((set) => ({
         } finally {
             set({isSigningUp: false});
         }
-    }, //this is the toast for  the signup state
+    }, //this is for the signup state
+
+    login: async (data) => {
+        set({isSigningUp: true}); //to update the state
+        try {
+            const res = await axiosInstance.post("/auth/login", data);
+            set({authUser: res.data});
+            toast.success("Logged in successfully");
+        } catch (error) {
+            toast.error("Incorrect Email and Password", error.message);
+        } finally {
+            set({isSigningUp: false});
+        }
+
+    }, //this is for the login.
 
     logout: async () => {
         try {
@@ -49,7 +63,8 @@ export const useAuthStore = create((set) => ({
         } catch (error) {
             toast.error(error.response.data.message);
         }
-    }
+    }, //this is for the logout state
+
 })) //we are passing a call back function here.
 
 

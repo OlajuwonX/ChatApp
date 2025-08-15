@@ -1,16 +1,9 @@
 import {useState} from "react";
-import {
-    Eye,
-    EyeOff,
-    Loader2,
-    Lock,
-    Mail,
-    MessageSquare
-} from "lucide-react";
-import {CiUser} from "react-icons/ci";
+import {Eye, EyeOff, Loader2, Lock, Mail, MessageSquare, User} from "lucide-react";
 import {Link} from "react-router-dom";
 import ImageContent from "../components/ImageContent.jsx";
 import toast from "react-hot-toast";
+import {useAuthStore} from "../store/useAuthStore.js";
 
 const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false); //this is for the show_password button, to make password visible.
@@ -20,17 +13,24 @@ const SignUp = () => {
         password: ""
     }); //this is to store the form input.
 
-    const [signup, isSigningUp] = useState({})
+    const {signup, isSigningUp} = useAuthStore(); //from useAuthStore, remember it is {} not []
 
     const validateForm = () => {
-        if (!formData.fullName.trim()) return toast.error("Enter" +
-            " your full name");
-        if (!formData.email.trim()) return toast.error("Enter" + "your email");
-        if (!/\S+@\S+\.\S+/.test(formData.email)) return toast.error("Invalid" + "email format")
+        if (!formData.fullName.trim()) return toast.error("Enter your full name");
+        if (!formData.email.trim()) return toast.error("Enter your email");
+        if (!/\S+@\S+\.\S+/.test(formData.email)) return toast.error("Invalid email format");
+        if (!formData.password) return toast.error("Password is required");
+        if (formData.password.length < 8) return toast.error("Password must be at least 8 characters");
+
+        return true;
     }; //this is to validate if any data is missing in any input fields and error will be returned.
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const success = validateForm(); //if the validateForm is
+        // successful
+        if (success === true) signup(formData);
     }; //this will handle the form submission. the (e) stands for event which prevents default, so the page will not
     // reload.
     return (
@@ -66,7 +66,7 @@ const SignUp = () => {
                             <div className="relative">
                                 <div
                                     className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <CiUser
+                                    <User
                                         className="w-5 h-5 text-base-content/40"/>
                                 </div>
                                 <input
@@ -179,7 +179,6 @@ const SignUp = () => {
                 title="Join our community"
                 subtitle="Connect with friends, share moments and stay in touch loved ones."
             />
-
         </div>
     )
 }

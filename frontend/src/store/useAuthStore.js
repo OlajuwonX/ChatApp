@@ -1,5 +1,6 @@
 import {create} from "zustand"
 import {axiosInstance} from "../lib/axios.js";
+import toast from "react-hot-toast";
 
 export const useAuthStore = create((set) => ({
     authUser: null, //to check if user is authenticated. set is the initial state.
@@ -23,9 +24,22 @@ export const useAuthStore = create((set) => ({
 
     },
 
-    signUp: async (data) => {
+    signup: async (data) => {
+        set({isSigningUp: true}); //to indicate the signup action is ongoing
+        try {
+            const res = await axiosInstance.post("/auth/signup", data); //this is to return the data the user sends
+            // from the signup page
+            set({authUser: res.data}); //this is to mke sure the data is authenticated when they successfully sign up.
+            toast.success("Account created successfully");
 
-    } //this is for the signup state
+        } catch (error) {
+            toast.error(error.response.data.message); //this to grab the signup data and return false if data is
+            // incorrect.
+            console.log("Error in signing up", error.message);
+        } finally {
+            set({isSigningUp: false});
+        }
+    } //this is the toast for  the signup state
 })) //we are passing a call back function here.
 
 

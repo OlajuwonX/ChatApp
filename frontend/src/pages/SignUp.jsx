@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Eye, EyeOff, Loader2, Lock, Mail, MessageSquare, User} from "lucide-react";
+import {Eye, EyeOff, Loader2, Lock, Mail, User} from "lucide-react";
 import {Link} from "react-router-dom";
 import ImageContent from "../components/ImageContent.jsx";
 import toast from "react-hot-toast";
@@ -39,15 +39,20 @@ const SignUp = () => {
             <div
                 className="flex flex-col justify-center items-center p-6 sm:p-12">
                 <div className="w-full max-w-md space-y-8">
-                    {/*LOGO*/}
                     <div className="text-center mb-8">
                         <div
                             className="flex flex-col items-center gap-2 group">
+
+                            {/*LOGO*/}
                             <div
-                                className="size-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                                <MessageSquare
-                                    className="size-6 text-primary"/>
+                                className="flex row gap-3 ">
+                                <img src="/Linka.svg" alt="Linka" className="size-10"/>
+                                <h2 className="text-3xl font-bold text-teal-200 tracking-wider"
+                                    style={{fontFamily: 'var(--font-logo)'}}>Linka</h2>
                             </div>
+                            <h1 className="text-2xl font-bold text-teal-200 tracking-tight"
+                                style={{fontFamily: 'var(--font-logo)'}}>Connects you — Instantly, Beautifully,
+                                Everywhere.</h1>
                             <h1 className="text-2xl font-bold mt-2">Create
                                 Account</h1>
                             <p className="text-base-content/60">Get

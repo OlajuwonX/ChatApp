@@ -65,6 +65,14 @@ export const useAuthStore = create((set) => ({
         }
     }, //this is for the logout state
 
+    updateProfile: async (data) => {
+        try {
+
+        } catch (error) {
+
+        }
+    } //to update the profile
+
 })) //we are passing a call back function here.
 
 

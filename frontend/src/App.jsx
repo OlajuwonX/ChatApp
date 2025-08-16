@@ -9,10 +9,11 @@ import {useAuthStore} from "./store/useAuthStore.js";
 import {useEffect} from "react";
 import {Loader} from "lucide-react"
 import {Toaster} from "react-hot-toast";
+import {useThemeStore} from "./store/useThemeStore.js";
 
 const App = () => {
     const {authUser, checkAuth, isCheckingAuth} = useAuthStore(); //destructuring the useAuth state created from zustand.
-
+    const {theme} = useThemeStore();
     useEffect(() => {
         checkAuth();
     }, [checkAuth]); //this is to make sure immediately the webapp reloads, authentication is always confirmed.
@@ -26,7 +27,7 @@ const App = () => {
     ) //this is for the loading spinner
 
     return (
-        <div data-theme="retro">
+        <div data-theme={theme}>
             <Navbar/>
             <Routes>
                 <Route path="/" element={authUser ? <Home/> :

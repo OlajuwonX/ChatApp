@@ -42,7 +42,7 @@ export const useAuthStore = create((set) => ({
     }, //this is for the signup state
 
     login: async (data) => {
-        set({isSigningUp: true}); //to update the state
+        set({isLoggingIn: true}); //to update the state
         try {
             const res = await axiosInstance.post("/auth/login", data);
             set({authUser: res.data});
@@ -50,7 +50,7 @@ export const useAuthStore = create((set) => ({
         } catch (error) {
             toast.error("Incorrect Email and Password", error.message);
         } finally {
-            set({isSigningUp: false});
+            set({isLoggingIn: false});
         }
 
     }, //this is for the login.
@@ -66,12 +66,20 @@ export const useAuthStore = create((set) => ({
     }, //this is for the logout state
 
     updateProfile: async (data) => {
+        set({isUpdatingProfile: true}); //to update the profile Picture uploading state.
         try {
+            const res = await axiosInstance.put("/auth/update-profile", data); //this is to call the logic from the backend
 
+            set({authUser: res.data}); //to update on the front end.
+            toast.success("Profile image updated successfully");
         } catch (error) {
-
+            console.log("Error in uploading profile image", error.message);
+            const errorMessage = error.response?.data?.message || "Profile image update error";
+            toast.error(errorMessage);
+        } finally {
+            set({isUpdatingProfile: false});
         }
-    } //to update the profile
+    } //to update the profile image to the database.
 
 })) //we are passing a call back function here.
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import {useAuthStore} from "../store/useAuthStore.js";
 import {Camera, Mail, User} from "lucide-react";
+import toast from "react-hot-toast";
 
 const Profile = () => {
     const {authUser, isUpdatingProfile, updateProfile} = useAuthStore()
@@ -11,13 +12,37 @@ const Profile = () => {
         const file = e.target.files[0]; //this is to extract the file. and the [0] is the current file being elected.
         if (!file) return;  //if any file was not selected, return to initial state.
 
+        // Check file size
+        if (file && file.size > 3 * 1024 * 1024) {
+            toast.error("Image size should be less than 3mb");
+            return;
+        }
+
+        //Check file type
+        if (!file.type.startsWith("image/")) {
+            toast.error("Image type is invalid");
+            return;
+        }
+
+        //Process the file
         const reader = new FileReader(); //to create a reader for the file to be uploaded.
         reader.readAsDataURL(file); //to read the file.
 
         reader.onloadend = async () => {
-            const base64Image = reader.result; //this is to convert to base64 format.
-            setSelectedImage(base64Image); //to update the profilePic state to the base64 image.
-            await updateProfile({profile: base64Image});
+            try {
+                const base64Image = reader.result;
+                setSelectedImage(base64Image);
+                await updateProfile({profilePic: base64Image}); //to make it change from profile to profilePic
+            } catch (error) {
+                console.error("Error processing image: ", error);
+                toast.error("Failed to process image");
+                setSelectedImage(null);
+            }
+        }
+
+        reader.onerror = () => {
+            toast.error("Failed to read image");
+            setSelectedImage(null);
         }
     }
     return (

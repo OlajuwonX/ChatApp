@@ -1,5 +1,38 @@
 @import "tailwindcss"; /*add this to be able to use the new tailwind version 4, should be imported only in one css file.*/
-@plugin "daisyui"; /*add this to use daisy ui in your project*/
+@plugin "daisyui" {
+    themes: light,
+    dark,
+    cupcake,
+    bumblebee,
+    emerald,
+    corporate,
+    synthwave,
+    retro,
+    cyberpunk,
+    valentine,
+    halloween,
+    garden,
+    forest,
+    aqua,
+    lofi,
+    pastel,
+    fantasy,
+    wireframe,
+    black,
+    luxury,
+    dracula,
+    cmyk,
+    autumn,
+    business,
+    acid,
+    lemonade,
+    night,
+    coffee,
+    winter,
+    dim,
+    nord,
+    sunset;
+} /*add this to use daisy ui in your project, the themes are meant for changes.*/
 
 @import url('https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&display=swap');
 

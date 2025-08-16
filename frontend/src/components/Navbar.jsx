@@ -14,7 +14,7 @@ const Navbar = () => {
                             <div className="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
                                 <img src="/Linka.svg" alt="Linka" className="size-6"/>
                             </div>
-                            <h1 className="text-xl font-bold text-teal-200 tracking-wider"
+                            <h1 className="text-2xl font-bold bg-gradient-to-r from-red-500 via-green-500 to-blue-500 bg-clip-text text-transparent tracking-wider"
                                 style={{fontFamily: 'var(--font-logo)'}}>Linka</h1>
                         </Link>
                     </div>

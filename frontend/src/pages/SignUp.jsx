@@ -47,10 +47,10 @@ const SignUp = () => {
                             <div
                                 className="flex row gap-3 ">
                                 <img src="/Linka.svg" alt="Linka" className="size-10"/>
-                                <h2 className="text-3xl font-bold text-teal-200 tracking-wider"
+                                <h2 className="text-3xl font-bold bg-gradient-to-r from-red-500 via-green-500 to-blue-500 bg-clip-text text-transparent tracking-wider"
                                     style={{fontFamily: 'var(--font-logo)'}}>Linka</h2>
                             </div>
-                            <h1 className="text-2xl font-bold text-teal-200 tracking-tight"
+                            <h1 className="text-2xl font-bold text-teal-400 tracking-tight"
                                 style={{fontFamily: 'var(--font-logo)'}}>Connects you — Instantly, Beautifully,
                                 Everywhere.</h1>
                             <h1 className="text-2xl font-bold mt-2">Create

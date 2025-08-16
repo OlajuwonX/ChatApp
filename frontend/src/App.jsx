@@ -26,7 +26,7 @@ const App = () => {
     ) //this is for the loading spinner
 
     return (
-        <div>
+        <div data-theme="retro">
             <Navbar/>
             <Routes>
                 <Route path="/" element={authUser ? <Home/> :

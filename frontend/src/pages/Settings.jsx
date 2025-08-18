@@ -1,22 +1,12 @@
 import {useThemeStore} from "../store/useThemeStore.js";
 import {THEMES} from "../../constants/constants.js";
+import ChatInterface from "../components/chat-interface.jsx";
 
-const PREVIEW_MESSAGES = [
-    {
-        id: 1,
-        content: "If jollof rice finish for party and na only salad remain, you go still dey smile?",
-        isSent: false
-    },
-    {
-        id: 2,
-        content: "Smile ke? I go just dey ask myself sey wetin carry me comot for house?",
-        isSent: true
-    },
-]
+
 const Settings = () => {
     const {theme, setTheme} = useThemeStore();
     return (
-        <div className="h-full container mx-auto px-4 pt-20 max-w-5xl">
+        <div className="h-full container mx-auto pb-10 px-4 pt-10 max-w-5xl">
             <div className="space-y-6">
                 <div className="flex flex-col gap-1">
                     <h2 className="text-lg font-semibold">
@@ -48,6 +38,8 @@ const Settings = () => {
                         </button>
                     ))}
                 </div>
+
+                <ChatInterface/>
             </div>
         </div>
     )

@@ -1,7 +1,10 @@
+import ChatPage from "../components/chatPage.jsx";
 
 const Home = () => {
     return (
-        <div>Home</div>
+        <div>
+            <ChatPage/>
+        </div>
     )
 }
 export default Home

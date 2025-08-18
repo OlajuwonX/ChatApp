@@ -8,6 +8,7 @@ export const useChatStore = create((set) => ({
     selectedUser: null,
     isUsersLoading: false, //this is for the skeleton ui before the users load.
     isMessagesLoading: false, //skeleton while messages are loading.
+    // setSelectedUser: false,
 
     getUsers: async () => {
         set({isUsersLoading: true});
@@ -32,5 +33,7 @@ export const useChatStore = create((set) => ({
         } finally {
             set({isMessagesLoading: false});
         }
-    } //we are passing the userId so we know the message we are opening, cos it is tied individually to the userid
+    }, //we are passing the userId so we know the message we are opening, cos it is tied individually to the userid
+
+    setSelectedUser: async (selectedUser) => set({selectedUser}) //this is to change the selected user state.
 }))

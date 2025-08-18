@@ -6,6 +6,7 @@ export const THEMES = [
     "cupcake",
     "synthwave",
     "retro",
+    "sunset",
     "valentine",
     "bumblebee",
     "cmyk",
@@ -20,7 +21,6 @@ export const THEMES = [
     "wireframe",
     "black",
     "luxury",
-
     "autumn",
     "business",
     "acid",
@@ -30,5 +30,4 @@ export const THEMES = [
     "winter",
     "dim",
     "nord",
-    "sunset",
 ];

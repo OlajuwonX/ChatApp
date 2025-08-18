@@ -34,8 +34,6 @@
     sunset;
 } /*add this to use daisy ui in your project, the themes are meant for changes.*/
 
-@import url('https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&display=swap');
-
 
 :root {
     --font-logo: "Edu+NSW+ACT+Cursive", Cursive;

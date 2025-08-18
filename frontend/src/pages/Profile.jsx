@@ -1,4 +1,4 @@
-import React from 'react'
+import {useState} from 'react'
 import {useAuthStore} from "../store/useAuthStore.js";
 import {Camera, Mail, User} from "lucide-react";
 import toast from "react-hot-toast";
@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 const Profile = () => {
     const {authUser, isUpdatingProfile, updateProfile} = useAuthStore()
 
-    const [selectedImage, setSelectedImage] = React.useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     const handleImageUpload = async (e) => {
         const file = e.target.files[0]; //this is to extract the file. and the [0] is the current file being elected.

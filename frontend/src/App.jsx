@@ -1,3 +1,4 @@
+import {useEffect} from "react";
 import Navbar from "./components/Navbar.jsx";
 import {Navigate, Route, Routes} from "react-router-dom";
 import Home from "./pages/Home.jsx";
@@ -6,7 +7,6 @@ import Login from "./pages/Login.jsx";
 import Settings from "./pages/Settings.jsx";
 import Profile from "./pages/Profile.jsx";
 import {useAuthStore} from "./store/useAuthStore.js";
-import {useEffect} from "react";
 import {Loader} from "lucide-react"
 import {Toaster} from "react-hot-toast";
 import {useThemeStore} from "./store/useThemeStore.js";

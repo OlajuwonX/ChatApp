@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState} from 'react';
 import {Eye, EyeOff, Loader2, Lock, Mail, User} from "lucide-react";
 import {Link} from "react-router-dom";
 import ImageContent from "../components/ImageContent.jsx";

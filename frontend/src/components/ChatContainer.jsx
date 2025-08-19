@@ -1,6 +1,26 @@
+import {useChatStore} from "../store/useChatStore.js";
+import {useEffect} from "react";
+import ChatHeader from "./chat-header.jsx";
+import MessageInput from "./message-input.jsx";
+
 const ChatContainer = () => {
+    const {messages, getMessages, isMessagesLoading, selectedUser} = useChatStore();
+
+    useEffect(() => {
+        getMessages(selectedUser._id);
+    }, [selectedUser._id, getMessages]) //call use effect above the if conditions because it has to run without
+    // conditions.
+
+    if (isMessagesLoading) return <div>Loading...</div>;
+
     return (
-        <div>ChatContainer</div>
+        <div className="flex-1 flex flex-col overflow-auto">
+            <ChatHeader/>
+
+            <p>Messages ...</p>
+
+            <MessageInput/>
+        </div>
     )
 }
 export default ChatContainer

@@ -16,7 +16,15 @@ export const useChatStore = create((set) => ({
             const res = await axiosInstance.get("/messages/users"); //from the backend endpoint.
             set({users: res.data}); //to receive data from the frontend.
         } catch (error) {
-            toast.error(error.response?.data?.error?.message);
+            console.error("❌ Error fetching users:", error);
+            console.error("Error response:", error.response?.data);
+
+            // ✅ Fixed error handling
+            const errorMessage = error.response?.data?.message ||
+                error.response?.data?.error ||
+                "Failed to fetch users";
+            toast.error(errorMessage);
+            set({users: []}); // Reset users on error
         } finally {
             set({isUsersLoading: false});
         }
@@ -29,11 +37,16 @@ export const useChatStore = create((set) => ({
             // userId
             set({messages: res.data}); //send the data to the backend to update the state.
         } catch (error) {
-            toast.error(error.response?.data?.error?.message);
+            console.error("❌ Error fetching messages:", error);
+            const errorMessage = error.response?.data?.message ||
+                error.response?.data?.error ||
+                "Failed to fetch messages";
+            toast.error(errorMessage);
         } finally {
             set({isMessagesLoading: false});
         }
+
     }, //we are passing the userId so we know the message we are opening, cos it is tied individually to the userid
 
-    setSelectedUser: async (selectedUser) => set({selectedUser}) //this is to change the selected user state.
+    setSelectedUser: (selectedUser) => set({selectedUser}) //this is to change the selected user state.
 }))

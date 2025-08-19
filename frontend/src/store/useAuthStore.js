@@ -7,9 +7,10 @@ export const useAuthStore = create((set) => ({
     isSigningUp: false, //for the loading effect on the signup button.
     isLoggingIn: false,
     isUpdatingProfile: false,
-
-
     isCheckingAuth: true, //for the loading state, this function is called immediately when the webapp is visited.
+    onlineUsers: [],
+
+
     checkAuth: async () => {
         try {
             const res = await axiosInstance.get("/auth/check");  //this is to call the check logic from the backend, the check is to confirm if the user is authenticated.

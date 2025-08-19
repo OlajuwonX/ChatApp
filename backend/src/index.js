@@ -3,8 +3,6 @@ import authRoutes from './routes/auth.route.js'; //importing the route for authe
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-
-import authRoute from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
 import {connectDB} from "./lib/db.js";
 
@@ -18,13 +16,13 @@ app.use(express.json()); //use this to be able to extract the json data from the
 app.use(cookieParser()); //allows you to use cookie-parser
 
 app.use(cors({
-    origin: "http://localhost:5173", //this is the frontend link
-    credentials: true, //this allows cookies and authorizations to be sent to the frontend.
-})
+        origin: "http://localhost:5173", //this is the frontend link
+        credentials: true, //this allows cookies and authorizations to be sent to the frontend.
+    })
 ); //use this to be able to run backend api on frontend links.
 
 app.use("/api/auth", authRoutes) //route for authentication
-app.use("/api/message", messageRoutes) //route for message action
+app.use("/api/messages", messageRoutes) //route for message action
 
 
 app.listen(PORT, () => {

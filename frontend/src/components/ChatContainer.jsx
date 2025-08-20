@@ -3,9 +3,10 @@ import {useEffect} from "react";
 import ChatHeader from "./chat-header.jsx";
 import MessageInput from "./message-input.jsx";
 import MessageSkeleton from "./skeletons/MessageSkeleton.jsx";
+import MessageContent from "./message-content.jsx";
 
 const ChatContainer = () => {
-    const {messages, getMessages, isMessagesLoading, selectedUser} = useChatStore();
+    const {getMessages, isMessagesLoading, selectedUser} = useChatStore();
 
     useEffect(() => {
         getMessages(selectedUser._id);
@@ -26,7 +27,7 @@ const ChatContainer = () => {
         <div className="flex-1 flex flex-col overflow-auto">
             <ChatHeader/>
 
-            <p>Messages ...</p>
+            <MessageContent/>
 
             <MessageInput/>
         </div>

@@ -51,7 +51,8 @@ export const useChatStore = create((set, get) => ({
     sendMessage: async (messageData) => {
         const {selectedUser, messages} = get()
         try {
-            const res = await axiosInstance.post(`/messages/${selectedUser}`, messageData); //sent to the backend
+            const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData); //sent to the
+            // backend
             // then we get the newly sent message back
             set({messages: [...messages, res.data]}); //the ...messages is to store previous messages. and the
             // res.data adds the latest data.

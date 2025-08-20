@@ -1,5 +1,6 @@
 import {useChatStore} from "../store/useChatStore.js";
 import {useAuthStore} from "../store/useAuthStore.js";
+import {formatMessageTime} from "../lib/utils.js";
 
 const MessageContent = () => {
     const {messages, selectedUser} = useChatStore();
@@ -26,7 +27,7 @@ const MessageContent = () => {
                     {/*Message time stamp*/}
                     <div className="chat-header mb-1">
                         <time className="text-xs opacity-50 md:text-base-100">
-                            {message.createdAt}
+                            {formatMessageTime(message.createdAt)}
                         </time>
                     </div>
 

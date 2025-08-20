@@ -32,7 +32,7 @@ const MessageContent = () => {
                     </div>
 
                     {/*Chat bubble to display messages*/}
-                    <div className="chat-bubble flex">
+                    <div className="chat-bubble flex flex-col">
                         {message.image && (
                             <img
                                 src={message.image}

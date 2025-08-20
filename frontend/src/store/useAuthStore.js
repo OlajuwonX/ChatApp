@@ -14,7 +14,6 @@ export const useAuthStore = create((set) => ({
     checkAuth: async () => {
         try {
             const res = await axiosInstance.get("/auth/check");  //this is to call the check logic from the backend, the check is to confirm if the user is authenticated.
-
             set({authUser: res.data}); //this is the setAuthUserState.
         } catch (error) {
             console.log("Error in CheckAuth", error.message)

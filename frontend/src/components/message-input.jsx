@@ -66,7 +66,7 @@ const MessageInput = () => {
                         <button className="absolute -top-1.5 -right-1.5 size-5 rounded-full bg-base-300"
                                 onClick={handleRemoveImage}
                                 type="button">
-                            <X className="size-3"/>
+                            <X className="size-4 pl-1"/>
                         </button>
                     </div>
                 </div>
@@ -94,7 +94,7 @@ const MessageInput = () => {
                     />
                     <button
                         type="button"
-                        className={`hidden sm:flex btn btn-circle ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
+                        className={`sm:flex bg-primary/10 p-1 justify-center items-center lg:p-2 rounded-lg ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
                         onClick={() => fileInputRef.current?.click()}
                     >
                         <Image size={20}/>

@@ -105,6 +105,11 @@ export const useAuthStore = create((set, get) => ({
         socket.connect();
 
         set({socket: socket}) //this is to set the socket state.
+
+        // socket.on is used to listen to events
+        socket.on("getOnlineUsers", (userIds) => {
+            set({onlineUsers: userIds})
+        })
     },
 
     disconnectSocket: () => {

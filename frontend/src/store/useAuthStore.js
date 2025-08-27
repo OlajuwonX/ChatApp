@@ -96,8 +96,12 @@ export const useAuthStore = create((set, get) => ({
     connectSocket: () => {
         const {authUser} = get()
         if (!authUser || get().socket?.connected) return; //this is to indicate that a connection will not be
-        // created for unAuthenticated users. or when we are connected, dont create a new connection.
-        const socket = io(BASE_URL);
+        // created for unAuthenticated users. or when we are connected, do not create a new connection.
+        const socket = io(BASE_URL, {
+            query: {
+                userId: authUser._id, //passing from the backend socket.js
+            }
+        });
         socket.connect();
 
         set({socket: socket}) //this is to set the socket state.

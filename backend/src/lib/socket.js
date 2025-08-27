@@ -11,11 +11,16 @@ const io = new Server(server, {
     }
 });
 
+// used to store online users
+const useSocketMap = {}; //userId: socketId
+
 io.on("connection", (socket) => {
     console.log("A user connected", socket.id);
 
+    const userId = socket.handshake.query.userId; //to get the online users
+
     socket.on("disconnect", () => {
-        console.log("A user disconnected");
+        console.log("A user disconnected", socket.id);
     })
 }); //this is to listen to events
 

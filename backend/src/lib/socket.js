@@ -11,12 +11,12 @@ const io = new Server(server, {
     }
 });
 
-io.on("connection", socket => {
+io.on("connection", (socket) => {
     console.log("A user connected", socket.id);
 
     socket.on("disconnect", () => {
         console.log("A user disconnected");
     })
-}) //this is to listen to events
+}); //this is to listen to events
 
 export {io, app, server}; //this logic is basically for the real time function of socket.io

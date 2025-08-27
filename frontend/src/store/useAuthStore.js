@@ -1,20 +1,26 @@
 import {create} from "zustand"
 import {axiosInstance} from "../lib/axios.js";
+import io from "socket.io-client";
 import toast from "react-hot-toast";
 
-export const useAuthStore = create((set) => ({
+const BASE_URL = "http://localhost:5001";
+
+export const useAuthStore = create((set, get) => ({
     authUser: null, //to check if user is authenticated. set is the initial state.
     isSigningUp: false, //for the loading effect on the signup button.
     isLoggingIn: false,
     isUpdatingProfile: false,
     isCheckingAuth: true, //for the loading state, this function is called immediately when the webapp is visited.
     onlineUsers: [],
+    socket: null, //for the socket.io client
 
 
     checkAuth: async () => {
         try {
             const res = await axiosInstance.get("/auth/check");  //this is to call the check logic from the backend, the check is to confirm if the user is authenticated.
             set({authUser: res.data}); //this is the setAuthUserState.
+            get().connectSocket()
+
         } catch (error) {
             console.log("Error in CheckAuth", error.message)
             set({authUser: null}); //then this means user is not authenticated. that is if it gets to this point.
@@ -32,6 +38,7 @@ export const useAuthStore = create((set) => ({
             set({authUser: res.data}); //this is to mke sure the data is authenticated when they successfully sign up.
             toast.success("Account created successfully");
 
+            get().connectSocket()
         } catch (error) {
             toast.error(error.response.data.message); //this to grab the signup data and return false if data is
             // incorrect.
@@ -47,6 +54,8 @@ export const useAuthStore = create((set) => ({
             const res = await axiosInstance.post("/auth/login", data);
             set({authUser: res.data});
             toast.success("Logged in successfully");
+
+            get().connectSocket()
         } catch (error) {
             toast.error("Incorrect Email and Password", error.message);
         } finally {
@@ -60,6 +69,7 @@ export const useAuthStore = create((set) => ({
             await axiosInstance.post("/auth/logout");
             set({authUser: null});
             toast.success("Logged out successfully");
+            get().disconnectSocket()
         } catch (error) {
             toast.error(error.response.data.message);
         }
@@ -79,9 +89,26 @@ export const useAuthStore = create((set) => ({
         } finally {
             set({isUpdatingProfile: false});
         }
-    } //to update the profile image to the database.
+    }, //to update the profile image to the database.
+
+    //For the socketIO functions.
+
+    connectSocket: () => {
+        const {authUser} = get()
+        if (!authUser || get().socket?.connected) return; //this is to indicate that a connection will not be
+        // created for unAuthenticated users. or when we are connected, dont create a new connection.
+        const socket = io(BASE_URL);
+        socket.connect();
+
+        set({socket: socket}) //this is to set the socket state.
+    },
+
+    disconnectSocket: () => {
+        if (get().socket?.connected) get().socket.disconnect() //only disconnect if a previous connection exists.
+    }
 
 })) //we are passing a call back function here.
 
 
 //zustand is a global state management tool. so we will be having all our global state management here.
+// get is used to get access to functions in another functions.

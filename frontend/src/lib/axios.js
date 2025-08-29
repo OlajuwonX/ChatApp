@@ -1,7 +1,9 @@
 import axios from 'axios'
 
 export const axiosInstance = axios.create({
-    baseURL: 'http://localhost:5001/api', //this is the backend server running. this is also to prevent adding the localhost:5001/api link everywhere we want to make calls to the backend.
+    baseURL: import.meta.env.MODE === "development" ? "http://localhost:5001/api" : "/api",
+    //this is the backend server running.
+    // this is also to prevent adding the localhost:5001/api link everywhere we want to make calls to the backend.
     withCredentials: true, //this is to send the cookies on every request
 
     headers: {

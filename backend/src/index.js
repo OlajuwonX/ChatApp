@@ -3,9 +3,11 @@ import authRoutes from './routes/auth.route.js'; //importing the route for authe
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import path from 'path';
 import messageRoutes from "./routes/message.route.js";
 import {connectDB} from "./lib/db.js";
 import {app, server} from "./lib/socket.js";
+
 
 console.log('🟡 Step 1: Basic imports successful');
 
@@ -17,6 +19,9 @@ console.log('🟡 Step 2: dotenv configured');
 
 const PORT = process.env.PORT || 5001; //use this to be able to run node on the port
 console.log('🟡 Step 3: Express app created');
+
+const __dirname = path.resolve();
+console.log('dirname path created');
 
 app.use(express.json()); //use this to be able to extract the json data from the body.
 app.use(cookieParser()); //allows you to use cookie-parser
@@ -41,6 +46,12 @@ console.log('✅ Auth routes import successful');
 
 app.use("/api/messages", messageRoutes) //route for message action
 
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../frontend/dist')));
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+    })
+}// for production, to use the dist which is a broken down version of the front end.
 
 server.listen(PORT, () => {
     console.log("server is running on PORT " + PORT);

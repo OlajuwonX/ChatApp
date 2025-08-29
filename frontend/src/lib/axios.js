@@ -9,7 +9,8 @@ export const axiosInstance = axios.create({
     headers: {
         "Content-Type": "application/json",
     }
-}) //this is an instance we will use throughout the app.
+})
+//this is an instance we will use throughout the app.
 
 
 //this is used in place of fetch, fetch is outdated and stressful

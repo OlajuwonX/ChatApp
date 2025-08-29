@@ -54,14 +54,12 @@ export const useAuthStore = create((set, get) => ({
             const res = await axiosInstance.post("/auth/login", data);
             set({authUser: res.data});
             toast.success("Logged in successfully");
-
             get().connectSocket()
         } catch (error) {
             toast.error("Incorrect Email and Password", error.message);
         } finally {
             set({isLoggingIn: false});
         }
-
     }, //this is for the login.
 
     logout: async () => {
@@ -79,7 +77,6 @@ export const useAuthStore = create((set, get) => ({
         set({isUpdatingProfile: true}); //to update the profile Picture uploading state.
         try {
             const res = await axiosInstance.put("/auth/update-profile", data); //this is to call the logic from the backend
-
             set({authUser: res.data}); //to update on the front end.
             toast.success("Profile image updated successfully");
         } catch (error) {
@@ -91,31 +88,27 @@ export const useAuthStore = create((set, get) => ({
         }
     }, //to update the profile image to the database.
 
-    //For the socketIO functions.
-
+    //For the socketIO function.
     connectSocket: () => {
-        const {authUser} = get()
+        const {authUser} = get();
         if (!authUser || get().socket?.connected) return; //this is to indicate that a connection will not be
         // created for unAuthenticated users. or when we are connected, do not create a new connection.
         const socket = io(BASE_URL, {
             query: {
                 userId: authUser._id, //passing from the backend socket.js
-            }
+            },
         });
         socket.connect();
-
-        set({socket: socket}) //this is to set the socket state.
+        set({socket: socket}); //this is to set the socket state.
 
         // socket.on is used to listen to events
         socket.on("getOnlineUsers", (userIds) => {
             set({onlineUsers: userIds})
         })
     },
-
     disconnectSocket: () => {
-        if (get().socket?.connected) get().socket.disconnect() //only disconnect if a previous connection exists.
-    }
-
+        if (get().socket?.connected) get().socket.disconnect(); //only disconnect if a previous connection exists.
+    },
 })) //we are passing a call back function here.
 
 

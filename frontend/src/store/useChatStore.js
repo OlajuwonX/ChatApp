@@ -1,6 +1,7 @@
 import {create} from "zustand"
 import {axiosInstance} from "../lib/axios.js";
 import toast from "react-hot-toast";
+import {useAuthStore} from "./useAuthStore.js";
 
 export const useChatStore = create((set, get) => ({
     messages: [], //the initial state of the chatroom which is always empty
@@ -52,14 +53,36 @@ export const useChatStore = create((set, get) => ({
         const {selectedUser, messages} = get()
         try {
             const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData); //sent to the
-            // backend
-            // then we get the newly sent message back
+            // backend then we get the newly sent message back
             set({messages: [...messages, res.data]}); //the ...messages is to store previous messages. and the
             // res.data adds the latest data.
         } catch (error) {
             toast.error(error.response?.data?.message);
         }
     }, // for the sendMessage endpoint, handles sending of messages.
+
+    // realtime messages via socket.io from the message.controller.js backend
+    subscribeToMessages: () => {
+        const {selectedUser} = get();
+        if (!selectedUser) return;
+
+        const socket = useAuthStore.getState().socket;
+
+        socket.on("newMessage", (newMessage) => {
+            const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
+            if (!isMessageSentFromSelectedUser) return;
+
+            set({
+                messages:
+                    [...get().messages, newMessage],
+            });
+        })
+    },
+
+    unsubscribeFromMessages: () => {
+        const socket = useAuthStore.getState().socket;
+        socket.off("newMessage");
+    },
 
     setSelectedUser: (selectedUser) => set({selectedUser}) //this is to change the selected user state.
 }))

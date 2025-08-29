@@ -6,11 +6,14 @@ import MessageSkeleton from "./skeletons/MessageSkeleton.jsx";
 import MessageContent from "./message-content.jsx";
 
 const ChatContainer = () => {
-    const {getMessages, isMessagesLoading, selectedUser} = useChatStore();
+    const {getMessages, isMessagesLoading, selectedUser, subscribeToMessages, unsubscribeFromMessages} = useChatStore();
 
     useEffect(() => {
         getMessages(selectedUser._id);
-    }, [selectedUser._id, getMessages]) //call use effect above the if conditions because it has to run without
+        subscribeToMessages();
+        return () => unsubscribeFromMessages();
+    }, [selectedUser._id, getMessages, subscribeToMessages, unsubscribeFromMessages]) //call use effect above the if conditions because it
+    // has to run without
     // conditions.
 
     if (isMessagesLoading) {

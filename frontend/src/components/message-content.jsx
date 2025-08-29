@@ -1,18 +1,29 @@
 import {useChatStore} from "../store/useChatStore.js";
 import {useAuthStore} from "../store/useAuthStore.js";
 import {formatMessageTime} from "../lib/utils.js";
+import {useEffect, useRef} from "react";
 
 const MessageContent = () => {
     const {messages, selectedUser} = useChatStore();
     const {authUser} = useAuthStore();
 
+    //this is to make messages scroll immediately after being sent.
+    const messageEndRef = useRef(null);
+
+    useEffect(() => {
+        if (messageEndRef.current && messages) {
+            messageEndRef.current.scrollIntoView({behavior: "smooth"});
+        }
+    }, [messages])
     return (
         //All the message UI are from daisy ui classes.
         <div className="mx-2 gap-3 flex-1 flex flex-col overflow-auto">
             {messages.map((message) => (
                 <div
                     key={message._id}
-                    className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}>
+                    className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
+                    ref={messageEndRef}
+                >
 
                     {/*Profile Picture*/}
                     <div className="chat-image avatar">

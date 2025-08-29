@@ -11,7 +11,7 @@ const Login = () => {
         password: "",
     });
 
-    const {login, isLoggingin} = useAuthStore();
+    const {login, isLoggingIn} = useAuthStore();
 
     const handleSubmit = async (e) => {
         e.preventDefault(); //prevent browser reload.
@@ -111,9 +111,9 @@ const Login = () => {
                         <button
                             type="submit"
                             className="btn btn-primary w-full"
-                            disabled={isLoggingin}
+                            disabled={isLoggingIn}
                         >
-                            {isLoggingin ? (
+                            {isLoggingIn ? (
                                 <>
                                     <Loader2
                                         className="size-5 animate-spin"/>

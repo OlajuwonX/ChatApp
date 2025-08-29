@@ -1,4 +1,4 @@
-import {useEffect} from "react"
+import {useEffect, useState} from "react"
 import {useChatStore} from "../store/useChatStore.js";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton.jsx";
 import {Users} from "lucide-react";
@@ -8,10 +8,13 @@ const Sidebar = () => {
     const {getUsers, users, selectedUser, setSelectedUser, isUsersLoading} = useChatStore()
 
     const {onlineUsers} = useAuthStore()
+    const [showOnlineUsersOnly, setShowOnlineUsersOnly] = useState(false)
 
     useEffect(() => {
         getUsers()
     }, [getUsers])
+
+    const filteredOnlineUsers = showOnlineUsersOnly ? users.filter(user => onlineUsers.includes(user._id)) : users;
 
     if (isUsersLoading) return <SidebarSkeleton/>
 
@@ -24,37 +27,51 @@ const Sidebar = () => {
                 </div>
 
                 {/*Online filter toggle*/}
-
-                <div className="overflow-y-auto w-full py-3">
-                    {users.map((user) => (
-                        <button
-                            key={user._id} //according to mongodb
-                            onClick={() => setSelectedUser(user)}
-                            className={`w-full py-3 flex items-center gap-3 hover:bg-base-300 transition-colors cursor-pointer ${selectedUser?._id ? "bg-base-300 ring-1 ring-base-300" : ""}`}>
-                            <div className="relative mx-auto lg:mx-0">
-                                <img
-                                    src={user.profilePic || "/avatar.png"}
-                                    alt={user.name}
-                                    className="size-9 object-cover rounded-full"
-                                />
-                                {onlineUsers.includes(user._id) && (
-                                    <span
-                                        className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-zinc-900"/>
-                                )}
-                            </div>
-
-                            {/*User info - only visible on larger screens*/}
-                            <div className="hidden lg:block text-left min-w-0">
-                                <div className="font-medium truncate">{user.fullName}</div>
-                                <div
-                                    className="text-sm text-zince-400">{onlineUsers.includes(user._id) ? "Online" : "offline"}</div>
-                            </div>
-                        </button>
-                    ))}
+                <div className="mt-3 flex flex-col items-center gap-2">
+                    <label className="cursor-pointer flex flex-col items-center gap-2">
+                        <input
+                            type="checkbox"
+                            checked={showOnlineUsersOnly}
+                            onChange={(e) => setShowOnlineUsersOnly(e.target.checked)}
+                            className="checkbox checkbox-xs"
+                        />
+                        <span className="text-xs">Online users</span>
+                    </label>
+                    <span className="text-xs text-zinz-500">({onlineUsers.length - 1} online)</span>
                 </div>
+            </div>
 
+            <div className="overflow-y-auto w-full py-3">
+                {filteredOnlineUsers.map((user) => (
+                    <button
+                        key={user._id} //according to mongodb
+                        onClick={() => setSelectedUser(user)}
+                        className={`w-full py-3 flex items-center gap-3 hover:bg-base-300 transition-colors cursor-pointer ${selectedUser?._id ? "bg-base-300 ring-1 ring-base-300" : ""}`}>
+                        <div className="relative mx-auto lg:mx-0">
+                            <img
+                                src={user.profilePic || "/avatar.png"}
+                                alt={user.name}
+                                className="size-9 object-cover rounded-full"
+                            />
+                            {onlineUsers.includes(user._id) && (
+                                <span
+                                    className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-zinc-900"/>
+                            )}
+                        </div>
+
+                        {/*User info - only visible on larger screens*/}
+                        <div className="hidden lg:block text-left min-w-0">
+                            <div className="font-medium truncate">{user.fullName}</div>
+                            <div
+                                className="text-sm text-zince-400">{onlineUsers.includes(user._id) ? "Online" : "offline"}
+                            </div>
+                        </div>
+                    </button>
+                ))}
             </div>
         </aside>
     )
 }
 export default Sidebar
+
+//the <({onlineUsers.length - 1} online)> is to make sure the main acct is not counted among the online users.
